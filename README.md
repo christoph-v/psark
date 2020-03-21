@@ -5,9 +5,9 @@ Following statements are intended to hold true for this repository
 ## 1. P&S-ARK is a TEMPLATE Project
 
 P&S-ARK is not a "real" project, but it is currently used to publish my opinion
-about a project / or about projects / that should be conducted by "some heavenly
-community" to elaborate the "Heavenly Requirements" for the NSN and to use the
-NSN, after it will have been standardized
+about a project / or about projects / that should be conducted by "some
+celestial community" to elaborate the "Celestial Requirements" for the NSN and
+to use the NSN, after it will have been standardized
 
 ## 2. The GOALs of this project can be described as follows
 
