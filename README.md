@@ -1,4 +1,8 @@
-# P&S-ARK - Packet Switched - Acting Kybernetic Reality
+# P&S-ARK
+
+Packet Switched - Acting Kybernetic Reality
+
+# Statements
 
 Following statements are intended to hold true for this repository
 
@@ -9,9 +13,16 @@ about a project / or about projects / that should be conducted by "some
 celestial community" to elaborate the "Celestial Requirements" for the NSN and
 to use the NSN, after it will have been standardized
 
+So, actually this means, I (we) will do experiments, we will test this or that
+software, but we will implement our own software only, if this is needed to
+test something else.
+
+The current repository is the place for such experiments and/or tests and/or
+testing software.
+
 ## 2. The GOALs of this project can be described as follows
 
 - The Publication of the Idea "Mixed Reality Group Call" by a GPL
 - Further goals to be defined
 
-Vienna, 2019-08-21
+Puchberg, 2024-05-11
