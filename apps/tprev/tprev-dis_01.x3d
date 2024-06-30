@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE X3D PUBLIC "ISO//Web3D//DTD X3D 3.3//EN"
+  "http://www.web3d.org/specifications/x3d-3.3.dtd">
+<X3D profile='Immersive' version='3.3'>
+<head>
+    <meta content='tprev-dis_01.x3d' name='title'/>
+    <meta content='Experimental Implementation of the TPREV/DIS use case (for FreeWRL)' name='description'/>
+    <meta content='Christoph VALENTIN' name='creator'/>
+    <meta content='n/a' name='translator'/>
+    <meta content='2024-06-30' name='created'/>
+    <meta content='n/a' name='translated'/>
+    <meta content='2024-06-30' name='modified'/>
+    <meta content='Version 01 - experimental implementation' name='version'/>
+    <meta content='https://github.com/christoph-v/psark/tree/master/apps/tprev' name='reference'/>
+    <meta content='https://www.web3d.org/x3d/content/examples/Basic/CAD/CadTeapot.x3d' name='requires'/>
+    <meta content='Copyright (c) Christoph VALENTIN, github.com/christoph-v' name='rights'/>
+    <meta content='n/a' name='drawing'/>
+    <meta content='n/a' name='image'/>
+    <meta content='n/a' name='MovingImage'/>
+    <meta content='n/a' name='photo'/>
+    <meta content='X3D Multiuser' name='subject'/>
+    <meta content='GPL' name='accessRights'/>
+    <meta content='*insert any known warnings, bugs or errors here*' name='warning'/>
+    <meta content='n/a' name='identifier'/>
+    <meta content='PSPad, http://www.pspad.com/' name='generator'/>
+    <meta content='license.html' name='license'/>
+    <!-- Additional authoring resources for meta-tags: http://www.dublincore.org/documents/dcmi-terms http://www.dublincore.org/documents/dces http://www.w3.org/TR/html4/struct/global.html#h-7.4.4 http://vancouver-webpages.com/META http://vancouver-webpages.com/META/about-mk-metas2.html Additional authoring resources for language codes: ftp://ftp.isi.edu/in-notes/bcp/bcp47.txt http://www.loc.gov/standards/iso639-2/langhome.html http://www.iana.org/numbers.html#L -->
+</head>
+<!-- "The Teapot Review (TPREV)", a simple MU scene using DIS Sensor Event Distribution,
+     It is assumed the reviewers (users) have a non-X3D voice channel (e.g. TeamSpeak)
+     open for their "discussion about the teapot" -->
+<Scene>
+  <!-- LayerSet with two layers, navigation happens in layer 1 -->
+  <LayerSet activeLayer='1' order='1 2' >
+    <!-- A.) the first Layer contains the main scenery - "The Teapot (DIS Multiuser enabled)" -->
+    <Layer isPickable='true'>
+      <!-- basic nodes, which might be present in any scene -->
+      <NavigationInfo headlight="true" type='"EXAMINE"' avatarSize="0.25, 1.75, 0.75"   />
+      <Background groundColor=".3 .3 .3" skyColor=".6 .6 .6" />
+      <DirectionalLight ambientIntensity=".2" direction="0 -1 -0" />
+      <DirectionalLight ambientIntensity=".2" direction="-1 -.1 -1" />
+      <Viewpoint description='My Overview' fieldOfView='1.570796' position='0 1.75 60' />
+      <!-- this group contains the red/green/blue 3D crosshair -->
+      <Group>
+        <!-- Arrow X -->
+        <Transform translation="25 0 0" rotation="0 0 -1 1.57">
+          <Shape>
+            <Cylinder DEF="Shaft" radius=".35" height="50" />
+            <Appearance>
+              <Material DEF="RED" diffuseColor="1 0 0" emissiveColor="1 0 0" />
+            </Appearance>
+          </Shape>
+        </Transform>
+        <Transform translation="50 0 0" rotation="0 0 -1 1.57">
+          <Shape>
+            <Cone DEF="Tip" bottomRadius=".8" height="3" />
+            <Appearance>
+              <Material USE="RED" />
+            </Appearance>
+          </Shape>
+        </Transform>
+        <!-- Arrow Y -->
+        <Transform translation="0 25 0" rotation="0 1 0 0">
+          <Shape>
+            <Cylinder USE="Shaft" />
+            <Appearance>
+              <Material DEF="GREEN" diffuseColor="0 1 0" emissiveColor="0 1 0" />
+            </Appearance>
+          </Shape>
+        </Transform>
+        <Transform translation="0 50 0" rotation="0 1 0 0">
+          <Shape>
+            <Cone USE="Tip" />
+            <Appearance>
+              <Material USE="GREEN" />
+            </Appearance>
+          </Shape>
+        </Transform>
+        <!-- Arrow Z -->
+        <Transform translation="0 0 25" rotation="1 0 0 1.57">
+          <Shape>
+            <Cylinder USE="Shaft" />
+            <Appearance>
+              <Material DEF="BLUE" diffuseColor="0 0 1" emissiveColor="0 0 1" />
+            </Appearance>
+          </Shape>
+        </Transform>
+        <Transform translation="0 0 50" rotation="1 0 0 1.57">
+          <Shape>
+            <Cone USE="Tip" />
+            <Appearance>
+              <Material USE="BLUE" />
+            </Appearance>
+          </Shape>
+        </Transform>
+      </Group>
+      <!-- the model that is being reviewed by the users of this scene -->
+      <!-- the four Transform nodes correspond to the four sliders in layer B.) -->
+      <Transform DEF="ModelHeadingTransform">
+         <Transform DEF="ModelPitchTransform">
+            <Transform DEF="ModelRollTransform">
+               <Transform DEF="ModelScaleTransform">
+                  <Inline DEF="Teapot" url='"https://www.web3d.org/x3d/content/examples/Basic/CAD/CadTeapot.x3d"' />
+               </Transform>
+            </Transform>
+         </Transform>
+      </Transform>
+      <!-- DIS multiuser facilities -->
+      <DISEntityManager DEF='EntityManager' networkMode='networkReader' >
+        <DISEntityTypeMapping category='77' specific='1' url='"smiley1.x3d" '/>
+        <DISEntityTypeMapping category='77' specific='2' url='"smiley2.x3d"'/>
+      </DISEntityManager>
+      <Collision enabled='false'>
+        <Group DEF='AvatarHolder'/>
+      </Collision>
+      <ROUTE fromField='addedEntities' fromNode='EntityManager' toField='addChildren' toNode='AvatarHolder'/>
+      <ROUTE fromField='removedEntities' fromNode='EntityManager' toField='removeChildren' toNode='AvatarHolder'/>
+    </Layer>
+    <!-- B.) the second layer contains the sliders that move with the user's display
+             like a HUD (heads up display) -->
+    <LayoutLayer isPickable='true'>
+      <!-- positioning the LayoutLayer -->
+      <Layout containerField='layout' align='"RIGHT","BOTTOM"' offset='0.0, 0.0' offsetUnits='"WORLD","WORLD"' scaleMode='"NONE","NONE"' size='0.4, 0.35' sizeUnits='"WORLD","WORLD"'/>
+      <!-- clipping the LayoutLayer -->
+      <Viewport containerField='viewport' clipBoundary='0, 1, 0, 1'/>
+      <!-- the content (children) of the LayoutLayer -->
+      <!-- B.1.) the background for the sliders -->
+      <Transform translation="0 0 -3">
+          <Shape >
+            <Appearance >
+              <Material diffuseColor="0 0 0" emissiveColor="0 0 0" transparency="0.7" />
+            </Appearance>
+            <Box size="100 100 0.02" />
+          </Shape>
+      </Transform>
+      <!-- the sliders with their ECMASCRIPT extensions -->
+      <!-- B.2.a.) first, the slider for scaling the model -->
+      <Transform DEF="ScaleSlider" translation="0 -0.75 0">
+        <Transform rotation="0 0 1 1.57">
+          <Shape >
+            <Appearance >
+              <Material >
+              </Material>
+            </Appearance>
+            <Cylinder radius=".05" height="2.5" />
+          </Shape>
+        </Transform>
+        <!--  the plane sensor  -->
+        <Transform DEF="ScaleSliderTransform" translation="0 0 0.1">
+          <PlaneSensor DEF="ScalePlaneSensor" description="click and drag to scale the model" minPosition="-1 0" maxPosition="1 0"/>
+          <Shape>
+            <Cylinder radius="0.05" height="0.32" />
+            <Appearance>
+              <Material/>
+            </Appearance>
+          </Shape>
+          <Transform DEF="ScaleTouchTransform" translation="0 0.16 0">
+            <TouchSensor DEF="ScaleTouchSensor" description="click to reset scale" />
+            <Shape>
+              <Sphere radius="0.07" />
+              <Appearance>
+                <Material diffuseColor="1 0 0" emissiveColor="1 0 0" />
+              </Appearance>
+            </Shape>
+          </Transform>
+        </Transform>
+        <!-- move the slider itself -->
+        <ROUTE fromField='translation_changed' fromNode='ScalePlaneSensor' toField='translation' toNode='ScaleSliderTransform'/>
+        <!-- modify the model -->
+        <Script DEF='ScaleTransformerScript' directOutput="true" mustEvaluate="true">
+          <!--  helper calculations  -->
+          <!-- input from the sensor nodes -->
+          <field accessType='inputOnly' name='newTranslation' type='SFVec3f'/>
+          <field accessType='inputOnly' name='resetScale' type='SFTime'/>
+          <!-- nodes that are modified by this script -->
+          <field accessType='inputOutput' name='scaleSliderTransform' type='SFNode'><Transform USE="ScaleSliderTransform"/></field>
+          <field accessType='inputOutput' name='scalePlaneSensor' type='SFNode'><PlaneSensor USE="ScalePlaneSensor"/></field>
+          <field accessType='inputOutput' name='modelScaleTransform' type='SFNode'><Transform USE="ModelScaleTransform"/></field>
+<![CDATA[
+ecmascript:
+
+function newTranslation(Value)
+{
+    modelScaleTransform.scale = new SFVec3f(Value.x + 1.0, Value.x + 1.0, Value.x + 1.0);
+}
+
+function resetScale(Value)
+{
+    scaleSliderTransform.translation = new SFVec3f(0.0, 0.0, 0.1);
+    scalePlaneSensor.offset = new SFVec3f(0,0,0);
+    modelScaleTransform.scale = new SFVec3f(1.0, 1.0, 1.0);
+}
+
+]]>
+        </Script>
+        <ROUTE fromField='translation_changed' fromNode='ScalePlaneSensor' toField='newTranslation' toNode='ScaleTransformerScript'/>
+        <ROUTE fromField='touchTime' fromNode='ScaleTouchSensor' toField='resetScale' toNode='ScaleTransformerScript'/>
+      </Transform>
+      <!-- B.2.b.) second, the slider for the roll of the model -->
+      <Transform DEF="RollSlider" translation="0 -0.25 0">
+        <Transform rotation="0 0 1 1.57">
+          <Shape >
+            <Appearance >
+              <Material >
+              </Material>
+            </Appearance>
+            <Cylinder radius=".05" height="2.5" />
+          </Shape>
+        </Transform>
+        <!--  the plane sensor  -->
+        <Transform DEF="RollSliderTransform" translation="0 0 0.1">
+          <PlaneSensor DEF="RollPlaneSensor" description="click and drag to roll the model" minPosition="-1 0" maxPosition="1 0"/>
+          <Shape>
+            <Cylinder radius="0.05" height="0.32" />
+            <Appearance>
+              <Material/>
+            </Appearance>
+          </Shape>
+          <Transform DEF="RollTouchTransform" translation="0 0.16 0">
+            <TouchSensor DEF="RollTouchSensor" description="click to reset roll" />
+            <Shape>
+              <Sphere radius="0.07" />
+              <Appearance>
+                <Material diffuseColor="1 0 0" emissiveColor="1 0 0" />
+              </Appearance>
+            </Shape>
+          </Transform>
+        </Transform>
+        <!-- move the slider itself -->
+        <ROUTE fromField='translation_changed' fromNode='RollPlaneSensor' toField='translation' toNode='RollSliderTransform'/>
+        <!-- modify the model -->
+        <Script DEF='RollTransformerScript' directOutput="true" mustEvaluate="true">
+          <!--  helper calculations  -->
+          <!-- input from the sensor nodes -->
+          <field accessType='inputOnly' name='newTranslation' type='SFVec3f'/>
+          <field accessType='inputOnly' name='resetRoll' type='SFTime'/>
+          <!-- nodes that are modified by this script -->
+          <field accessType='inputOutput' name='rollSliderTransform' type='SFNode'><Transform USE="RollSliderTransform"/></field>
+          <field accessType='inputOutput' name='rollPlaneSensor' type='SFNode'><PlaneSensor USE="RollPlaneSensor"/></field>
+          <field accessType='inputOutput' name='modelRollTransform' type='SFNode'><Transform USE="ModelRollTransform"/></field>
+<![CDATA[
+ecmascript:
+
+function newTranslation(Value)
+{
+    modelRollTransform.rotation = new SFRotation(1.0, 0.0, 0.0, Value.x * Math.PI);
+}
+
+function resetRoll(Value)
+{
+    rollSliderTransform.translation = new SFVec3f(0.0, 0.0, 0.1);
+    rollPlaneSensor.offset = new SFVec3f(0,0,0);
+    modelRollTransform.rotation = new SFRotation(1.0, 0.0, 0.0, 0.0);
+}
+
+]]>
+        </Script>
+        <ROUTE fromField='translation_changed' fromNode='RollPlaneSensor' toField='newTranslation' toNode='RollTransformerScript'/>
+        <ROUTE fromField='touchTime' fromNode='RollTouchSensor' toField='resetRoll' toNode='RollTransformerScript'/>
+      </Transform>
+      <!-- B.2.c.) third, the slider for the pitch of the model -->
+      <Transform DEF="PitchSlider" translation="0 0.25 0">
+        <Transform rotation="0 0 1 1.57">
+          <Shape >
+            <Appearance >
+              <Material >
+              </Material>
+            </Appearance>
+            <Cylinder radius=".05" height="2.5" />
+          </Shape>
+        </Transform>
+        <!--  the plane sensor  -->
+        <Transform DEF="PitchSliderTransform" translation="0 0 0.1">
+          <PlaneSensor DEF="PitchPlaneSensor" description="click and drag to change the pitch of the model" minPosition="-1 0" maxPosition="1 0"/>
+          <Shape>
+            <Cylinder radius="0.05" height="0.32" />
+            <Appearance>
+              <Material/>
+            </Appearance>
+          </Shape>
+          <Transform DEF="PitchTouchTransform" translation="0 0.16 0">
+            <TouchSensor DEF="PitchTouchSensor" description="click to reset pitch" />
+            <Shape>
+              <Sphere radius="0.07" />
+              <Appearance>
+                <Material diffuseColor="1 0 0" emissiveColor="1 0 0" />
+              </Appearance>
+            </Shape>
+          </Transform>
+        </Transform>
+        <!-- move the slider itself -->
+        <ROUTE fromField='translation_changed' fromNode='PitchPlaneSensor' toField='translation' toNode='PitchSliderTransform'/>
+        <!-- modify the model -->
+        <Script DEF='PitchTransformerScript' directOutput="true" mustEvaluate="true">
+          <!--  helper calculations  -->
+          <!-- input from the sensor nodes -->
+          <field accessType='inputOnly' name='newTranslation' type='SFVec3f'/>
+          <field accessType='inputOnly' name='resetPitch' type='SFTime'/>
+          <!-- nodes that are modified by this script -->
+          <field accessType='inputOutput' name='pitchSliderTransform' type='SFNode'><Transform USE="PitchSliderTransform"/></field>
+          <field accessType='inputOutput' name='pitchPlaneSensor' type='SFNode'><PlaneSensor USE="PitchPlaneSensor"/></field>
+          <field accessType='inputOutput' name='modelPitchTransform' type='SFNode'><Transform USE="ModelPitchTransform"/></field>
+<![CDATA[
+ecmascript:
+
+function newTranslation(Value)
+{
+    modelPitchTransform.rotation = new SFRotation(0.0, 0.0, 1.0, Value.x * Math.PI / 2.0);
+}
+
+function resetPitch(Value)
+{
+    pitchSliderTransform.translation = new SFVec3f(0.0, 0.0, 0.1);
+    pitchPlaneSensor.offset = new SFVec3f(0,0,0);
+    modelPitchTransform.rotation = new SFRotation(0.0, 0.0, 1.0, 0.0);
+}
+
+]]>
+        </Script>
+        <ROUTE fromField='translation_changed' fromNode='PitchPlaneSensor' toField='newTranslation' toNode='PitchTransformerScript'/>
+        <ROUTE fromField='touchTime' fromNode='PitchTouchSensor' toField='resetPitch' toNode='PitchTransformerScript'/>
+      </Transform>
+      <!-- B.2.d.) fourth, the slider for the heading of the model -->
+      <Transform DEF="HeadingSlider" translation="0 0.75 0">
+        <Transform rotation="0 0 1 1.57">
+          <Shape >
+            <Appearance >
+              <Material >
+              </Material>
+            </Appearance>
+            <Cylinder radius=".05" height="2.5" />
+          </Shape>
+        </Transform>
+        <!--  the plane sensor  -->
+        <Transform DEF="HeadingSliderTransform" translation="0 0 0.1">
+          <PlaneSensor DEF="HeadingPlaneSensor" description="click and drag to change the heading of the model" minPosition="-1 0" maxPosition="1 0"/>
+          <Shape>
+            <Cylinder radius="0.05" height="0.32" />
+            <Appearance>
+              <Material/>
+            </Appearance>
+          </Shape>
+          <Transform DEF="HeadingTouchTransform" translation="0 0.16 0">
+            <TouchSensor DEF="HeadingTouchSensor" description="click to reset heading" />
+            <Shape>
+              <Sphere radius="0.07" />
+              <Appearance>
+                <Material diffuseColor="1 0 0" emissiveColor="1 0 0" />
+              </Appearance>
+            </Shape>
+          </Transform>
+        </Transform>
+        <!-- move the slider itself -->
+        <ROUTE fromField='translation_changed' fromNode='HeadingPlaneSensor' toField='translation' toNode='HeadingSliderTransform'/>
+        <!-- modify the model -->
+        <Script DEF='HeadingTransformerScript' directOutput="true" mustEvaluate="true">
+          <!--  helper calculations  -->
+          <!-- input from the sensor nodes -->
+          <field accessType='inputOnly' name='newTranslation' type='SFVec3f'/>
+          <field accessType='inputOnly' name='resetHeading' type='SFTime'/>
+          <!-- nodes that are modified by this script -->
+          <field accessType='inputOutput' name='headingSliderTransform' type='SFNode'><Transform USE="HeadingSliderTransform"/></field>
+          <field accessType='inputOutput' name='headingPlaneSensor' type='SFNode'><PlaneSensor USE="HeadingPlaneSensor"/></field>
+          <field accessType='inputOutput' name='modelHeadingTransform' type='SFNode'><Transform USE="ModelHeadingTransform"/></field>
+<![CDATA[
+ecmascript:
+
+function newTranslation(Value)
+{
+    modelHeadingTransform.rotation = new SFRotation(0.0, 1.0, 0.0, -Value.x * Math.PI);
+}
+
+function resetHeading(Value)
+{
+    headingSliderTransform.translation = new SFVec3f(0.0, 0.0, 0.1);
+    headingPlaneSensor.offset = new SFVec3f(0,0,0);
+    modelHeadingTransform.rotation = new SFRotation(0.0, 1.0, 0.0, 0.0);
+}
+
+]]>
+        </Script>
+        <ROUTE fromField='translation_changed' fromNode='HeadingPlaneSensor' toField='newTranslation' toNode='HeadingTransformerScript'/>
+        <ROUTE fromField='touchTime' fromNode='HeadingTouchSensor' toField='resetHeading' toNode='HeadingTransformerScript'/>
+      </Transform>
+    </LayoutLayer>
+  </LayerSet>
+</Scene>
+</X3D>
